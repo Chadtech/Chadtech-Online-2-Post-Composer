@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "browserify": "^13.0.0",
+    "electron": "^1.6.10",
     "express": "^4.13.4",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",

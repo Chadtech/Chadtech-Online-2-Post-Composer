@@ -57,7 +57,7 @@ gulp.task("elm-make", function () {
     paths.mainElm,
     "--warn",
     "--output",
-    paths.development + "/elm.js"
+    "./source/elm.js"
   ].join(" ");
 
   cp.exec(cmd, function(error, stdout, stderr) {

@@ -4,5 +4,6 @@ development/style.css
 distribution/app.js
 distribution/elm.js
 distribution/style.css
+source/elm.js
 node_modules
 elm-stuff
