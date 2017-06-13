@@ -17,7 +17,3 @@ type Message
 type Direction
     = Up
     | Down
-
-
-type alias Handler a =
-    a -> Message

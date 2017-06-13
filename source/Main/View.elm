@@ -1,21 +1,58 @@
 module Main.View exposing (view)
 
-import Html exposing (Html, p, text, div, textarea, a)
+import Html exposing (Html, p, text, div, textarea, a, input)
 import Html.Attributes exposing (class, classList, value)
 import Html.Events exposing (onInput, onClick)
 import Types.Model exposing (Model, TextType(..))
 import Types.Message exposing (Message(..), Direction(..))
-import Array
+import Array exposing (Array)
 import Util exposing ((:=))
 
 
 view : Model -> Html Message
 view model =
     Array.indexedMap section model.content
-        |> Array.append (Array.fromList [ titleBar ])
+        |> Array.append (header model)
         |> Array.push bottomButtons
         |> Array.toList
         |> div [ class "main" ]
+
+
+header : Model -> Array (Html Message)
+header { title, date } =
+    Array.fromList
+        [ titleBar
+        , titleField title
+        , dateField date
+        ]
+
+
+titleField : String -> Html Message
+titleField title =
+    div
+        [ class "field-container" ]
+        [ p [] [ text "Title" ]
+        , input
+            [ class "field"
+            , value title
+            , onInput UpdateTitle
+            ]
+            []
+        ]
+
+
+dateField : String -> Html Message
+dateField date =
+    div
+        [ class "field-container" ]
+        [ p [] [ text "Date" ]
+        , input
+            [ class "field"
+            , value date
+            , onInput UpdateDate
+            ]
+            []
+        ]
 
 
 bottomButtons : Html Message
@@ -67,7 +104,8 @@ section index ( str, type_ ) =
             ]
             [ text "X" ]
         , textarea
-            [ value str
+            [ classList [ "logic" := (type_ == Logic) ]
+            , value str
             , onInput (UpdateSection index type_)
             ]
             []

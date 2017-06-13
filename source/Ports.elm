@@ -1,7 +1,6 @@
 port module Ports exposing (..)
 
+import Json.Encode exposing (Value)
 
-port toJS : String -> Cmd message
 
-
-port fromJS : (String -> message) -> Sub message
+port save : Value -> Cmd msg

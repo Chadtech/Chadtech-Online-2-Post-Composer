@@ -1,9 +1,10 @@
 module Main.Update exposing (update)
 
-import Types.Model exposing (Model, TextType(..))
+import Types.Model exposing (Model, TextType(..), encoder)
 import Types.Message exposing (Message(..), Direction(..))
 import Array
 import Array.Extra
+import Ports
 
 
 update : Message -> Model -> ( Model, Cmd Message )
@@ -62,7 +63,7 @@ update message ({ content } as model) =
             (moveSection index direction model) ! []
 
         Save ->
-            model ! []
+            model ! [ Ports.save (encoder model) ]
 
 
 
