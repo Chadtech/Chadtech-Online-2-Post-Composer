@@ -1,9 +1,22 @@
-module Types.Message exposing (Message(..), Handler)
+module Types.Message exposing (..)
+
+import Types.Model exposing (TextType(..))
 
 
 type Message
-    = UpdateField String
-    | HandlePort String
+    = UpdateTitle String
+    | UpdateDate String
+    | UpdateSection Int TextType String
+    | ChangeSectionType Int TextType
+    | DeleteSection Int
+    | AddSection
+    | MoveSection Int Direction
+    | Save
+
+
+type Direction
+    = Up
+    | Down
 
 
 type alias Handler a =
