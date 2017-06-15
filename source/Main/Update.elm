@@ -65,6 +65,9 @@ update message ({ content } as model) =
         Save ->
             model ! [ Ports.save (encoder model) ]
 
+        Open ->
+            model ! [ Ports.open () ]
+
 
 
 -- HELPERS

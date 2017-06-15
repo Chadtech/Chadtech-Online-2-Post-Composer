@@ -65,6 +65,9 @@ bottomButtons =
         , a
             [ onClick Save ]
             [ text "Save" ]
+        , a
+            [ onClick Open ]
+            [ text "Open" ]
         ]
 
 

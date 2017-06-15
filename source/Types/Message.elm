@@ -12,6 +12,7 @@ type Message
     | AddSection
     | MoveSection Int Direction
     | Save
+    | Open
 
 
 type Direction
