@@ -1,10 +1,11 @@
 module Main.Update exposing (update)
 
-import Types.Model exposing (Model, TextType(..), encoder)
+import Types.Model as Model exposing (Model, TextType(..))
 import Types.Message exposing (Message(..), Direction(..))
 import Array
 import Array.Extra
 import Ports
+import Json.Decode as Json
 
 
 update : Message -> Model -> ( Model, Cmd Message )
@@ -63,10 +64,18 @@ update message ({ content } as model) =
             (moveSection index direction model) ! []
 
         Save ->
-            model ! [ Ports.save (encoder model) ]
+            model ! [ Ports.save (Model.encode model) ]
 
         Open ->
             model ! [ Ports.open () ]
+
+        Load json ->
+            case Json.decodeValue Model.decoder json of
+                Ok val ->
+                    val ! []
+
+                Err err ->
+                    model ! []
 
 
 

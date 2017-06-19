@@ -1,6 +1,7 @@
 module Types.Message exposing (..)
 
 import Types.Model exposing (TextType(..))
+import Json.Decode exposing (Value)
 
 
 type Message
@@ -13,6 +14,7 @@ type Message
     | MoveSection Int Direction
     | Save
     | Open
+    | Load Value
 
 
 type Direction

@@ -1,7 +1,9 @@
 module Types.Model exposing (..)
 
 import Array exposing (Array)
-import Json.Encode as Json exposing (Value)
+import Json.Encode as Encode exposing (Value)
+import Json.Decode as Decode exposing (Decoder, andThen, fail)
+import Json.Decode.Pipeline as Pipeline exposing (required, optional, hardcoded)
 
 
 type alias Model =
@@ -18,33 +20,83 @@ type TextType
 
 
 
--- ENCODER
+-- DECODER --
 
 
-encoder : Model -> Value
-encoder model =
-    Json.object
-        [ ( "title", Json.string model.title )
-        , ( "date", Json.string model.date )
+decoder : Decoder Model
+decoder =
+    Pipeline.decode Model
+        |> required "body" (Decode.array contentDecoder)
+        |> required "title" Decode.string
+        |> required "date" Decode.string
+
+
+contentDecoder : Decoder ( String, TextType )
+contentDecoder =
+    Decode.field "type" Decode.string
+        |> andThen contentDecoderHelp
+
+
+contentDecoderHelp : String -> Decoder ( String, TextType )
+contentDecoderHelp type_ =
+    case type_ of
+        "normal" ->
+            Decode.map2 (,)
+                (toListString |> andThen concatDecoder)
+                (Decode.succeed Normal)
+
+        "logic" ->
+            Decode.map2 (,)
+                (toListString |> andThen concatDecoder)
+                (Decode.succeed Logic)
+
+        "image" ->
+            Decode.map2 (,)
+                (Decode.field "content" Decode.string)
+                (Decode.succeed Image)
+
+        _ ->
+            Decode.fail "content is of unrecognized type (not normal, logic, or image)"
+
+
+concatDecoder : List String -> Decoder String
+concatDecoder =
+    String.join "\n" >> Decode.succeed
+
+
+toListString : Decoder (List String)
+toListString =
+    Decode.field "content" (Decode.list Decode.string)
+
+
+
+-- ENCODER --
+
+
+encode : Model -> Value
+encode model =
+    Encode.object
+        [ ( "title", Encode.string model.title )
+        , ( "date", Encode.string model.date )
         , ( "body", bodyEncoder (Array.toList model.content) )
         ]
 
 
 bodyEncoder : List ( String, TextType ) -> Value
 bodyEncoder =
-    Json.list << List.map sectionEncoder
+    Encode.list << List.map sectionEncoder
 
 
 sectionEncoder : ( String, TextType ) -> Value
 sectionEncoder ( str, type_ ) =
     case type_ of
         Image ->
-            Json.object
-                [ ( "content", Json.string str )
+            Encode.object
+                [ ( "content", Encode.string str )
                 , str
                     |> toString
                     |> String.toLower
-                    |> Json.string
+                    |> Encode.string
                     |> (,) "type"
                 ]
 
@@ -52,13 +104,13 @@ sectionEncoder ( str, type_ ) =
             let
                 paragraphs =
                     String.split "\n" str
-                        |> List.map Json.string
+                        |> List.map Encode.string
             in
-                Json.object
-                    [ ( "content", Json.list paragraphs )
+                Encode.object
+                    [ ( "content", Encode.list paragraphs )
                     , type_
                         |> toString
                         |> String.toLower
-                        |> Json.string
+                        |> Encode.string
                         |> (,) "type"
                     ]

@@ -13,8 +13,8 @@ app.ports.save.subscribe(function(json) {
 
 app.ports.open.subscribe(function() {
     dialog.showOpenDialog(function(fn) {
-        var json = JSON.stringify(fs.readFileSync(fn[0], "utf-8"));
+        var json = JSON.parse(fs.readFileSync(fn[0], "utf-8"));
 
-        console.log(json);
+        app.ports.load.send(json);
     })
 });
