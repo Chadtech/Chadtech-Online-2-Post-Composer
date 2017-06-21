@@ -1,20 +1,18 @@
-# HI THERE
+# Chadtech Online 2 Post Composer
 
-This is my 
-
-# Elm Gulp Browserify Boilerplate
-
-Its basically a template development environment with all of my favorite dependencies. It also might be useful to look at, if you are learning how to use Elm.
+Chadtech Online is my personal website. This is the third iteration of that website. I use this electron app to compose the blog posts I put on that website.
 
 How to get going..
 ```
-> git clone https://github.com/Chadtech/elm-gulp-browserify-boilerplate new-project
-> cd new-project
+> git clone https://github.com/Chadtech/Chadtech-Online-2-Post-Composer
+> cd ./Chadtech-Online-2-Post-Composer
 > npm install
 > elm package install --yes
 > gulp
 
-then open up http://localhost:2978
+.. in a separate terminal
+
+> electron electron-start.js
 ```
 
 
@@ -27,6 +25,7 @@ source/                   -- Source files
   app.js                  -- Loads your elm file, and handles ports
   Ports.elm               -- Javascript inter-operation ports
   Main.elm
+  Util.elm
   Types/
     Model.elm
     Message.elm
@@ -34,8 +33,11 @@ source/                   -- Source files
     Main.styl
     field.styl
     p.styl
-  Components/
-    Basics.elm
+    a.styl
+    field.styl
+    section.style
+    text-area.styl
+    title-bar.styl
   Main/
     Init.elm
     Subscriptions.elm
@@ -43,20 +45,6 @@ source/                   -- Source files
     View.elm
 gulpFile.js
 server.js
+electron-start.js
 ```
 
-
-## Distribution
-
-To compile to `distribution` type into your terminal..
-
-```
-gulp distribution
-```
-
-It will run the js command without debug on. Its pretty sparse in what it does, but if you have your own dist operations, you can put them in that gulp task.
-
-
-## Elm Format
-
-There is an [Elm-Format](https://github.com/avh4/elm-format) task in this gulp file. Its not on by default, but you can switch to it by uncommenting a little code. 
